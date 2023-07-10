@@ -24,5 +24,5 @@ What is the most interesting part of the game?
 
 Reflection on learning.  This is very important.  You need to think about what you are learning and how it is making you better at using the engine.
 
-## Getting started
+
 
