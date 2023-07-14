@@ -1,6 +1,6 @@
 # CGRA 252 Game Engine Programming
 
-## Your name
+## Sabina Talipova
 ## Assignment 1
 
 ## Title of the Game
