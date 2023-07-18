@@ -3,7 +3,7 @@
 ## Sabina Talipova
 ## Assignment 1
 
-## Title of the Game
+## Little Mario Game
 
 
 Link to video (onedrive/vimeo/youtube/googledrive other video service) showing the prototype/game ( approx. 4-9 mins )
