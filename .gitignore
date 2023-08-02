@@ -74,4 +74,5 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 # Externals content
-Content/ExternalContent
+Content/ExternalContent/*
+Content/ExternalContent_old/*
