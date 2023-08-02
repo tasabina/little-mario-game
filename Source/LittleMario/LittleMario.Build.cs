@@ -12,7 +12,7 @@ public class LittleMario : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
-		PublicIncludePaths.AddRange(new string[] { "LittleMario/Public/Player", "LittleMario/Public/Components" });
+		PublicIncludePaths.AddRange(new string[] { "LittleMario/Public/Player", "LittleMario/Public/Components", "LittleMario/Public/PickUp" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

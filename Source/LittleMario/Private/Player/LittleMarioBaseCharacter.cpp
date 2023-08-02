@@ -7,6 +7,9 @@
 #include "Components/LMCharacterMovementComponent.h"
 #include "Components/LMHealthComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "GameFramework/Controller.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacterLog, All, All);
 
 // Sets default values
 ALittleMarioBaseCharacter::ALittleMarioBaseCharacter(const FObjectInitializer& ObjInit)
@@ -36,23 +39,27 @@ void ALittleMarioBaseCharacter::BeginPlay()
 
     check(HealthComponent);
     check(HealthTextComponent);
-	
+    check(GetCharacterMovement());
+
+    OnHealthChanged(HealthComponent->GetHealth());
+    HealthComponent->OnDeath.AddUObject(this, &ALittleMarioBaseCharacter::OnDeath);
+    HealthComponent->OnHealthChanged.AddUObject(this, &ALittleMarioBaseCharacter::OnHealthChanged);
+
+    LandedDelegate.AddDynamic(this, &ALittleMarioBaseCharacter::OnGroundLanded);
 }
 
 // Called every frame
 void ALittleMarioBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-    const auto Health = HealthComponent->GetHealth();
-    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
-
 }
 
 // Called to bind functionality to input
 void ALittleMarioBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+    check(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ALittleMarioBaseCharacter::Jump);
     PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ALittleMarioBaseCharacter::OnStartRunning);
@@ -118,3 +125,36 @@ void ALittleMarioBaseCharacter::OnStopRunning()
 {
       ReadyToRun = false;
 }
+
+void ALittleMarioBaseCharacter::OnDeath()
+{
+      UE_LOG(LogBaseCharacterLog, Display, TEXT("Player %s is dead"), *GetName());
+      PlayAnimMontage(DeathAnimMontage);
+
+      GetCharacterMovement()->DisableMovement();
+
+      SetLifeSpan(5.0f);
+
+      if (Controller)
+      {
+          Controller->ChangeState(NAME_Spectating);
+      }
+}
+
+void ALittleMarioBaseCharacter::OnHealthChanged(float Health)
+{
+      HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+}
+
+void ALittleMarioBaseCharacter::OnGroundLanded(const FHitResult& Hit)
+{
+      const auto FallVelocityZ = -GetVelocity().Z;
+
+      if (FallVelocityZ < LandedDamageVelocity.X) return;
+
+      const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
+
+      TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
+}
+
+
