@@ -6,6 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/LMCharacterMovementComponent.h"
 #include "Components/LMHealthComponent.h"
+#include "Components/LMBankComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/Controller.h"
 
@@ -30,6 +31,10 @@ ALittleMarioBaseCharacter::ALittleMarioBaseCharacter(const FObjectInitializer& O
     HealthComponent = CreateDefaultSubobject<ULMHealthComponent>("HealthComponent");
     HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
     HealthTextComponent->SetupAttachment(GetRootComponent());
+
+    BankComponent = CreateDefaultSubobject<ULMBankComponent>("BankComponent");
+    BankTextComponent = CreateDefaultSubobject<UTextRenderComponent>("BankTextComponent");
+    BankTextComponent->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
@@ -39,11 +44,16 @@ void ALittleMarioBaseCharacter::BeginPlay()
 
     check(HealthComponent);
     check(HealthTextComponent);
+    check(BankComponent);
+    check(BankTextComponent);
     check(GetCharacterMovement());
 
     OnHealthChanged(HealthComponent->GetHealth());
     HealthComponent->OnDeath.AddUObject(this, &ALittleMarioBaseCharacter::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &ALittleMarioBaseCharacter::OnHealthChanged);
+
+    OnBankStateChanged(BankComponent->GetBankState());
+    BankComponent->OnBankStateChanged.AddUObject(this, &ALittleMarioBaseCharacter::OnBankStateChanged);
 
     LandedDelegate.AddDynamic(this, &ALittleMarioBaseCharacter::OnGroundLanded);
 }
@@ -155,6 +165,11 @@ void ALittleMarioBaseCharacter::OnGroundLanded(const FHitResult& Hit)
       const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
 
       TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
+}
+
+void ALittleMarioBaseCharacter::OnBankStateChanged(float CoinAmounts)
+{
+      BankTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), CoinAmounts)));
 }
 
 

@@ -9,6 +9,7 @@
 class UCameraComponent;
 class USpringArmComponent;
 class ULMHealthComponent;
+class ULMBankComponent;
 class UTextRenderComponent;
 
 UCLASS()
@@ -32,6 +33,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     UTextRenderComponent* HealthTextComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    ULMBankComponent* BankComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    UTextRenderComponent* BankTextComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
     UAnimMontage* DeathAnimMontage;
@@ -73,7 +80,8 @@ private:
 
       void OnDeath();
       void OnHealthChanged(float Health);
+      void OnBankStateChanged(float CoinAmounts);
 
 	  UFUNCTION()
-	  void OnGroundLanded(const FHitResult& Hit);
+      void OnGroundLanded(const FHitResult& Hit);
 };

@@ -3,13 +3,12 @@
 
 #include "PickUp/LMHealthPickUp.h"
 #include "Components/LMHealthComponent.h"
+#include "LMUtils.h"
 
 bool ALMHealthPickUp::GivePickupTo(APawn* PlayerPawn)
 {
-    // const auto HealthComponent = LMUtils::GetLMPlayerComponent<ULMHealthComponent>(PlayerPawn);
-    // if (!HealthComponent) return false;
+    const auto HealthComponent = LMUtils::GetLMPlayerComponent<ULMHealthComponent>(PlayerPawn);
+    if (!HealthComponent) return false;
 
-    // return HealthComponent->TryToAddHealth(HealthAmount);
-
-    return true;
+    return HealthComponent->TryToAddHealth(HealthAmount);
 }

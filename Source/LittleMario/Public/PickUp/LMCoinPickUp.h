@@ -14,9 +14,12 @@ class LITTLEMARIO_API ALMCoinPickUp : public ALMBasePickUp
 {
 	GENERATED_BODY()
 
+	//public:
+ //     float GetCoinsAmount() const { return CoinsAmount; }
+
 	protected:
       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PickUp", meta = (ClampMin = "1.0", ClampMax = "10.0"))
-      int32 CoinsAmount = 10;
+      float CoinsAmount = 10;
 
 	private:
       virtual bool GivePickupTo(APawn* PlayerPawn) override;
