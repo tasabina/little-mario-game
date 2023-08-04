@@ -17,5 +17,8 @@ class LITTLEMARIO_API ULMPlayerHUDWidget : public UUserWidget
 	public:
       UFUNCTION(BlueprintCallable, Category = "UI")
       float GetHealthPercent() const;
+
+	  UFUNCTION(BlueprintCallable, Category = "UI")
+      float GetBankStatement() const;
 	
 };

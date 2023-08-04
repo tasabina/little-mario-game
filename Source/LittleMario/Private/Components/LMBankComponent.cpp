@@ -4,6 +4,7 @@
 #include "Components/LMBankComponent.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
+#include "PickUp/LMCoinPickUp.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBankStateComponent, All, All);
 // Sets default values for this component's properties
@@ -23,31 +24,43 @@ void ULMBankComponent::BeginPlay()
 
 	  SetBankState(InitialBankState);
 
-	  AActor* ComponentOwner = GetOwner();
+	  //AActor* ComponentOwner = GetOwner();
 
-      if (ComponentOwner)
-      {
-          ComponentOwner->OnActorBeginOverlap.AddDynamic(this, &ULMBankComponent::OnTakeAnyCoin);
-      }
+   //   if (ComponentOwner)
+   //   {
+   //       ComponentOwner->OnActorBeginOverlap.AddDynamic(this, &ULMBankComponent::OnTakeAnyCoin);
+   //   }
 }
 
 
 bool ULMBankComponent::TryToAddCoin(float CoinsAmount)
 {
-      return false;
+      UE_LOG(LogBankStateComponent, Warning, TEXT("Coins: %f"), BankState);
+      SetBankState(BankState + CoinsAmount);
+      return true;
 }
 
-void ULMBankComponent::OnTakeAnyCoin(AActor* OverlappedActor, AActor* OtherActor)
-{
-      if (!OtherActor || !GetWorld()) return;
-
-      UE_LOG(LogBankStateComponent, Warning, TEXT("OtherActor: %s"), *FString(OtherActor->GetName()));
-
-      SetBankState(BankState + 1.0f);
-
-      UE_LOG(LogBankStateComponent, Warning, TEXT("%f"), BankState);
-
-}
+//void ULMBankComponent::OnTakeAnyCoin(AActor* OverlappedActor, AActor* OtherActor)
+//{
+//      if (!OtherActor || !GetWorld()) return;
+//
+//      ALMCoinPickUp* CoinPickUp = Cast<ALMCoinPickUp>(OtherActor);
+//
+//      if (CoinPickUp)
+//      {
+//          UE_LOG(LogBankStateComponent, Warning, TEXT("OtherActor: %f"), CoinPickUp->GetCoinsAmount());
+//
+//          const float CoinsAmount = CoinPickUp->GetCoinsAmount();
+//
+//          SetBankState(BankState + CoinsAmount);
+//
+//          UE_LOG(LogBankStateComponent, Warning, TEXT("%f"), BankState);
+//      }
+//      else
+//      {
+//          return;
+//      }
+//}
 
 void ULMBankComponent::SetBankState(float CoinsAmount)
 {

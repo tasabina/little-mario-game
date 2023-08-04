@@ -36,8 +36,8 @@ protected:
 private:
 	float BankState = 0.0f;
 
-	UFUNCTION()
-    void OnTakeAnyCoin(AActor* OverlappedActor, AActor* OtherActor);
+	/*UFUNCTION()
+    void OnTakeAnyCoin(AActor* OverlappedActor, AActor* OtherActor);*/
 
 	void SetBankState(float CoinsAmount);
 	
